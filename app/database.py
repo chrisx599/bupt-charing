@@ -1,6 +1,6 @@
 import pymysql
 
-class Config:
+class DBConfig:
     def __init__(self) -> None:
         self.database()
 

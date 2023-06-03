@@ -1,23 +1,25 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, Blueprint
+import functools
+from app import get_db
 
-from config import Config
+db = get_db()
+user_login = Blueprint("login", __name__)
 
-app = Flask(__name__)
-# app.config.from_object(Config)
-db = Config()
+def auth(func):
+        @functools.wraps(func)
+        def inner(*args, **kwargs):
+            username = session.get('user')
+            if not username:
+                return redirect("/login")
+            return func(*args, **kwargs)
+        return inner
 
-# 域名后面跟的东西
-@app.route("/", methods=["GET", "POST"])
-def index():
-    return render_template("index.html")
-
-@app.route("/login", methods=["GET", "POST"])
+@user_login.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
         return render_template("login.html")
     username = request.form.get("username")
     passward = request.form.get("password")
-    # print(username, passward)
 
     # 创建游标对象
     # app.config
@@ -34,21 +36,15 @@ def login():
     if result:
         print(f"result{result}")
         if passward == result[1]:
+            session['user'] = username
             return redirect("/")
         pwd_error = "密码错误"
         return render_template("login.html", error=pwd_error)
     else:
-        # print("66666666")
         name_error = "用户名不存在"
         return render_template("login.html", error=name_error)
-    # 获取全部数据
-    # all_ = cursor.fetchall()
-    # for i in all_:
-    #         print(i[0])
-    #         print(i[1])
 
-    
-@app.route("/register", methods=["GET", "POST"])
+@user_login.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == "GET":
         return render_template("register.html")
@@ -76,12 +72,4 @@ def register():
     # 执行sql语句
     cursor.execute(sql, [username, passward])
     db.connection.commit()
-    # result = cursor.fetchone()
-    # print(result)
     return redirect("/login")
-    
-
-if __name__ == "__main__":
-    # import os
-    # print(os.getcwd())
-    app.run()
