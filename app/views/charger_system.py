@@ -224,7 +224,13 @@ class ChargeSystem(threading.Thread):
                 print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
                 if alread_charge_time >= current_car.charge_need_time:
                     item.queue.get()
-                    item.use_state = False
+                    # 看队列里有没车
+                    if not item.queue.empty():
+                        current_car = item.queue.queue[0]
+                        current_car.start_charge_time = time.time()
+                        current_car.charge_need_time = current_car.need_power / item.power_per_hour
+                    else:
+                        item.use_state = False
         # 检查慢充的状态
         for item in self.slow_charger:
             # 如果充电桩是空闲状态
@@ -247,7 +253,13 @@ class ChargeSystem(threading.Thread):
                 print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
                 if alread_charge_time >= current_car.charge_need_time:
                     item.queue.get()
-                    item.use_state = False
+                    # 看队列里有没车
+                    if not item.queue.empty():
+                        current_car = item.queue.queue[0]
+                        current_car.start_charge_time = time.time()
+                        current_car.charge_need_time = current_car.need_power / item.power_per_hour
+                    else:
+                        item.use_state = False
 
             print("调度充电站完成")
 
