@@ -9,6 +9,10 @@ class Charger():
         self.queue = queue.Queue(2)
         self.charger_state = True  # 充电桩的状态(好坏)
         self.use_state = False  # 充电桩的使用状态
+        self.total_times = 0  # 总共使用次数
+        self.total_charge_power = 0  # 总共充了多少电
+        self.total_charge_time = 0  # 总共充电时间
+
 
     def join(self):
         if self.queue.full():
@@ -30,7 +34,7 @@ class SlowCharger(Charger):
         self.power_per_hour = 7.0
 
 class Car():
-    def __init__(self, user_name, car_id, need_power) -> None:
+    def __init__(self, user_name, car_id, need_power, charge_mode) -> None:
         self.user_name = user_name
         self.car_id = car_id
         self.need_power = float(need_power)
@@ -41,6 +45,7 @@ class Car():
         self.charge_need_time = None
         self.remain_charge_time = None
         self.already_charge_time = None
+        self.charge_mode = None
         
 
 def init_charger():

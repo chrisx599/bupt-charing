@@ -13,6 +13,8 @@ def create_app():
     app.register_blueprint(charge)
     app.register_blueprint(user_login)
 
+
+
     return app
 
 def get_db():
