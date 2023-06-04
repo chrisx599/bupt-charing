@@ -112,12 +112,12 @@ class ChargeSystem(threading.Thread):
             print("快充2状态", self.fast_charger[1].use_state)
 
 
+
     def update_wait_station(self):
         print("正在调度等待区")
         # 更新等待区的状态
         # 快充等待队列
         if not self.fast_wait_area_queue.empty():
-
             is_all_charger_queue_full = True
             for charger in self.fast_charger:
                 if charger.charger_state and not charger.queue.full():
@@ -144,6 +144,7 @@ class ChargeSystem(threading.Thread):
                                     current_charge_car = charger.queue.queue[0]
                                     remain_need_time = self.cal_remain_need_time(current_charge_car, current_time)
                                     if remain_need_time < best_time:
+                                        best_time = remain_need_time
                                         best_charger = charger
                     # 如果能放
                     # 将等待区的先来的车放入需要等待时间最少的充电桩队列中
@@ -151,24 +152,24 @@ class ChargeSystem(threading.Thread):
                         best_charger.queue.put(self.fast_wait_area_queue.get())
             else:
                 print("快充桩现在是满的")
-        # 慢充等待队列
-        if not self.slow_wait_area_queue.empty():
 
+        if not self.slow_wait_area_queue.empty():
             is_all_charger_queue_full = True
-            for charger in self.fast_charger:
+            for charger in self.slow_charger:
                 if charger.charger_state and not charger.queue.full():
                     is_all_charger_queue_full = False
+                    break
             if not is_all_charger_queue_full:
-
                 queue_length = self.slow_wait_area_queue.qsize()
                 for i in range(queue_length):
-                # for item in self.slow_wait_area_queue.queue.copy():
-                    # 看哪个慢充充电桩有空闲位置并且等待时间最短
+                    # 看哪个快充充电桩有空闲位置并且等待时间最短
                     current_time = time.time()
                     best_charger = None
                     best_time = float('inf')
                     for charger in self.slow_charger:
+                        # 先检查充电桩的状态是否是好的
                         if charger.charger_state:
+                            # 看充电桩是否正在被使用
                             if not charger.use_state:
                                 best_charger = charger
                                 break
@@ -178,11 +179,14 @@ class ChargeSystem(threading.Thread):
                                     current_charge_car = charger.queue.queue[0]
                                     remain_need_time = self.cal_remain_need_time(current_charge_car, current_time)
                                     if remain_need_time < best_time:
+                                        best_time = remain_need_time
                                         best_charger = charger
                     # 如果能放
                     # 将等待区的先来的车放入需要等待时间最少的充电桩队列中
                     if best_charger:
                         best_charger.queue.put(self.slow_wait_area_queue.get())
+            else:
+                print("慢充桩现在是满的")
         print("调度等待区完成")
 
     def cal_remain_need_time(self, current_charge_car, current_time):
