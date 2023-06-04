@@ -228,6 +228,9 @@ class ChargeSystem(threading.Thread):
                 alread_charge_time = self.cal_alread_charge_time(current_car, current_time)
                 print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
                 if alread_charge_time >= current_car.charge_need_time:
+                    item.total_times += 1
+                    item.total_charge_time += current_car.charge_need_time
+                    item.total_charge_power += current_car.need_power
                     item.queue.get()
                     # 看队列里有没车
                     if not item.queue.empty():
@@ -257,6 +260,9 @@ class ChargeSystem(threading.Thread):
                 alread_charge_time = self.cal_alread_charge_time(current_car, current_time)
                 print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
                 if alread_charge_time >= current_car.charge_need_time:
+                    item.total_times += 1
+                    item.total_charge_time += current_car.charge_need_time
+                    item.total_charge_power += current_car.need_power
                     item.queue.get()
                     # 看队列里有没车
                     if not item.queue.empty():
