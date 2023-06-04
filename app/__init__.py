@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 from .database import DBConfig
-from .views.charger import charge_system
-
+from .views.charger_system import ChargeSystem
 
 
 def create_app():
@@ -14,10 +13,15 @@ def create_app():
     app.register_blueprint(charge)
     app.register_blueprint(user_login)
 
-    charge_system()
-
     return app
 
 def get_db():
     db = DBConfig()
     return db
+
+
+def get_charge_system():
+    charge_system = ChargeSystem()
+    return charge_system
+
+charge_system = get_charge_system()
