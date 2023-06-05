@@ -7,6 +7,6 @@ bill = Blueprint("bill",__name__)
 
 @bill.route("/bill",methods=["GET", "POST"])
 @auth
-def bill():
+def tobill():
     username = session.get('username')
     return render_template('bill.html')

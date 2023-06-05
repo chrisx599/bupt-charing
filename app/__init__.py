@@ -9,10 +9,12 @@ def create_app():
     from .views.login import user_login
     from .views.charge import charge
     from .views.admin import admin
+    from .views.bill import bill
 
     app.register_blueprint(charge)
     app.register_blueprint(user_login)
     app.register_blueprint(admin)
+    app.register_blueprint(bill)
 
 
     return app

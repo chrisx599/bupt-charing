@@ -279,7 +279,7 @@ class ChargeSystem(threading.Thread):
                     else:
                         item.use_state = False
 
-            # print("调度充电站完成")
+            print("调度充电站完成")
 
 
 class SimulateTimer():
