@@ -12,3 +12,10 @@ def tobill():
     data_list = billing_system.get_user_bill(username)
     print(data_list)
     return render_template('bill.html',order=data_list)
+
+@bill.route("edit_bill",methods=["GET", "POST"])
+@auth
+def toedit():
+    username = session.get('user')
+    data_list = billing_system.get_user_bill(username)
+    return render_template('edit_bill.html',order=data_list[0])
