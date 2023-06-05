@@ -29,7 +29,7 @@ function addScript(url){
         var totalTime = infodata.totalTime
         var totalEnergy = infodata.totalEnergy
         fastbtn1.innerHTML = (infodata.isWorking) ? "关闭" : "开启"
-        fastbtn1.disabled = infodata.isUsing
+        // fastbtn1.disabled = infodata.isUsing
         fast11.innerHTML = "工作状态:  " + isWorking
         fast15.innerHTML = "使用状态:  " + isUsing
         fast12.innerHTML = "累计充电次数:  " + totalTimes
@@ -75,7 +75,7 @@ function addScript(url){
         var totalTime = infodata.totalTime
         var totalEnergy = infodata.totalEnergy
         fastbtn2.innerHTML = (infodata.isWorking) ? "关闭" : "开启"
-        fastbtn2.disabled = infodata.isUsing
+        // fastbtn2.disabled = infodata.isUsing
         fast21.innerHTML = "工作状态:  " + isWorking
         fast25.innerHTML = "使用状态:  " + isUsing
         fast22.innerHTML = "累计充电次数:  " + totalTimes
@@ -122,7 +122,7 @@ function addScript(url){
         var totalTime = infodata.totalTime
         var totalEnergy = infodata.totalEnergy
         slowbtn1.innerHTML = (infodata.isWorking) ? "关闭" : "开启"
-        slowbtn1.disabled = infodata.isUsing
+        // slowbtn1.disabled = infodata.isUsing
         slow11.innerHTML = "工作状态:  " + isWorking
         slow12.innerHTML = "累计充电次数:  " + totalTimes
         slow13.innerHTML = "累计充电时长:  " + totalTime
@@ -168,7 +168,7 @@ function addScript(url){
         var totalTime = infodata.totalTime
         var totalEnergy = infodata.totalEnergy
         slowbtn2.innerHTML = (infodata.isWorking) ? "关闭" : "开启"
-        slowbtn2.disabled = infodata.isUsing
+        // slowbtn2.disabled = infodata.isUsing
         slow21.innerHTML = "工作状态:  " + isWorking
         slow22.innerHTML = "累计充电次数:  " + totalTimes
         slow23.innerHTML = "累计充电时长:  " + totalTime
@@ -214,7 +214,7 @@ function addScript(url){
         var totalTime = infodata.totalTime
         var totalEnergy = infodata.totalEnergy
         slowbtn3.innerHTML = (infodata.isWorking) ? "关闭" : "开启"
-        slowbtn3.disabled = infodata.isUsing
+        // slowbtn3.disabled = infodata.isUsing
         slow31.innerHTML = "工作状态:  " + isWorking
         slow32.innerHTML = "累计充电次数:  " + totalTimes
         slow33.innerHTML = "累计充电时长:  " + totalTime
