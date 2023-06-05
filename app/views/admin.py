@@ -3,7 +3,7 @@
 # @Time     : 2023/6/4 12:46
 # @Author   : qingyao
 from flask import Flask, render_template, request, redirect, session, Blueprint, make_response,jsonify
-from .. import charge_system
+from .. import charge_system, db
 
 admin = Blueprint("admin", __name__)
 
@@ -15,11 +15,21 @@ def pile_info():
         pile = charge_system.fast_charger[pile_id - 1]
     else:
         pile = charge_system.slow_charger[pile_id - 3]
-    data = {"isWorking": pile.charger_state,
-            "totalTimes": pile.total_times,
-            "totalTime": pile.total_charge_time,
-            "totalEnergy": pile.total_charge_power,
-            "isUsing": pile.use_state}
+    if pile.queue.full():
+        data = {"isWorking": pile.charger_state,
+                "totalTimes": pile.total_times,
+                "totalTime": pile.total_charge_time,
+                "totalEnergy": pile.total_charge_power,
+                "isUsing": pile.use_state,
+                "carInfo": {"user_name": pile.queue.queue[1].user_name,
+                            "need_power": pile.queue.queue[1].need_power,
+                            "wait_time": pile.queue.queue[1].join_charge_queue_time}}
+    else:
+        data = {"isWorking": pile.charger_state,
+                "totalTimes": pile.total_times,
+                "totalTime": pile.total_charge_time,
+                "totalEnergy": pile.total_charge_power,
+                "isUsing": pile.use_state}
     # print(data)
     return jsonify(data)
 
@@ -58,6 +68,21 @@ def get_reports():
             [],
         ]
     }
+
+    cursor = db.connection.cursor()
+    # sql语句
+    sql = """
+            select *
+            from `bill`
+        """
+    # 执行sql语句
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    # print(result)
+    # for item in result:
+    #     temp = [item[0], str(item[1]), item[], item[], item[], item[], item[], item[], item[]]
+    #     jsonData['rows'].append()
+
     return jsonify(jsonData)
 
 @admin.route("/a/waiting")

@@ -26,7 +26,7 @@
                     <div><a href="bill" class="nav-link">我的订单</a></div>
                 </li>
                 <li class="nav-item">
-                    <div class="nav-link">导3</div>
+                    <div><a href="chagebill" class="nav-link">修改订单</a></div>
                 </li>
             </ul>
         </div>
@@ -198,7 +198,10 @@
             <button type="submit" class="btn btn-primary">提交</button>
             <button type="button" class="btn btn-secondary">取消</button>
         </div>
-        <span style="color: red">{{ info }}</span>
+        <div class="d-flex justify-content-center">
+            <span style="color: red">{{ info }}</span>
+        </div>
+
     </form>
 </div>
 <script type="text/javascript" src="../static/js/bootstrap.bundle.js"></script>

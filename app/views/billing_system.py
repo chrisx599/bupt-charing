@@ -1,16 +1,16 @@
 class BillingSystem:
 
-    def __init__(self,db):
+    def __init__(self, db):
         self.state = 0
         self.db = db
 
-    def add_user_bill(self,data_list): #(time, charge_time, charge_degree, charge_cost, service_cost, total_cost, user_name)
+    def add_user_bill(self, data_list): #(time, charge_time, charge_degree, charge_cost, service_cost, total_cost, user_name)
         cursor = self.db.connection.cursor()
         sql = """
             INSERT INTO bill
-            (time, charge_time, charge_degree, charge_cost, service_cost, total_cost, user_name)
+            (id, time, charge_time, charge_degree, charge_cost, service_cost, total_cost, user_name)
             VALUES
-            (%s, %s, %s, %s, %s, %s, %s)
+            (%s, %s, %s, %s, %s, %s, %s, %s)
             """
         cursor.execute(sql, tuple(data_list))
         self.db.connection.commit()
