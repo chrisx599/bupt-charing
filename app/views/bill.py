@@ -3,7 +3,7 @@ from .login import auth
 from .. import charge_system
 from .. import billing_system
 
-bill = Blueprint("bill",__name__)
+bill = Blueprint("bill", __name__)
 
 @bill.route("/bill",methods=["GET", "POST"])
 @auth

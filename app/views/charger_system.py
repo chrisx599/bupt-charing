@@ -48,7 +48,7 @@ class Car():
         self.already_charge_time = None
         self.charge_mode = charge_mode
         self.order_id = order_id
-        # self.charger_num = None
+        self.charger_num = None
         
 
 def init_charger():
@@ -90,7 +90,7 @@ def implement_charge(charge_mode, car_id, car_need_power
 
 
 class ChargeSystem(threading.Thread):
-    def __init__(self) -> None:
+    def __init__(self, db) -> None:
         super().__init__()
         # 初始化充电系统
         self.fast_charger, self.slow_charger = init_charger()
@@ -98,6 +98,7 @@ class ChargeSystem(threading.Thread):
         # 初始化时钟系统
         self.timer = SimulateTimer()
         self.start()
+        self.db = db
 
 
     def run(self) -> None:
@@ -218,7 +219,9 @@ class ChargeSystem(threading.Thread):
         # print("正在调度充电站")
         # 更新充电区每个充电桩的状态
         # 检查快充的状态
+        charger_num = 0
         for item in self.fast_charger:
+            charger_num += 1
             # 如果充电桩是空闲状态并且充电桩是好的
             if not item.use_state and item.charger_state:
                 # 充电桩的队列中是否有车
@@ -242,6 +245,8 @@ class ChargeSystem(threading.Thread):
                     item.total_times += 1
                     item.total_charge_time += current_car.charge_need_time
                     item.total_charge_power += current_car.need_power
+                    current_car.charger_num = 'f' + str(charger_num)
+                    self.update_data_table(current_car)
                     item.queue.get()
                     # 看队列里有没车
                     if not item.queue.empty():
@@ -251,7 +256,9 @@ class ChargeSystem(threading.Thread):
                     else:
                         item.use_state = False
         # 检查慢充的状态
+        charger_num = 0
         for item in self.slow_charger:
+            charger_num += 1
             # 如果充电桩是空闲状态
             if not item.use_state and item.charger_state:
                 # 充电桩的队列中是否有车
@@ -274,6 +281,8 @@ class ChargeSystem(threading.Thread):
                     item.total_times += 1
                     item.total_charge_time += current_car.charge_need_time
                     item.total_charge_power += current_car.need_power
+                    current_car.charger_num = 's' + str(charger_num)
+                    self.update_data_table(current_car)
                     item.queue.get()
                     # 看队列里有没车
                     if not item.queue.empty():
@@ -284,6 +293,17 @@ class ChargeSystem(threading.Thread):
                         item.use_state = False
 
             # print("调度充电站完成")
+
+    def update_data_table(self, car: Car):
+        cursor = self.db.connection.cursor()
+        # sql语句
+        sql = """UPDATE bill
+              SET charger_num = %s
+              WHERE id = %s"""
+        # 执行sql语句
+        cursor.execute(sql, [car.charger_num, car.order_id])
+        self.db.connection.commit()
+
 
 
 class SimulateTimer():
