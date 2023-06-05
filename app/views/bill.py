@@ -8,5 +8,7 @@ bill = Blueprint("bill",__name__)
 @bill.route("/bill",methods=["GET", "POST"])
 @auth
 def tobill():
-    username = session.get('username')
-    return render_template('bill.html')
+    username = session.get('user')
+    data_list = billing_system.get_user_bill(username)
+    print(data_list)
+    return render_template('bill.html',order=data_list)
