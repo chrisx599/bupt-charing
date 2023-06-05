@@ -6,6 +6,31 @@
     <link rel="stylesheet" href="../static/css/bootstrap.css">
 </head>
 <body>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <div class="container">
+        <a href="#" class="navbar-brand">巴普特大学充电桩系统</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navmenu">
+            <ul class="navbar-nav ms-auto">
+                <!-- margin start -->
+                <li class="nav-item">
+                    <div><a href="login" class="nav-link">用户{{ username }}</a></div>
+                </li>
+                <li class="nav-item">
+                    <div><a href="bill" class="nav-link">我的订单</a></div>
+                </li>
+                <li class="nav-item">
+                    <div><a href="changebill" class="nav-link">修改订单</a></div>
+                </li>
+                <li class="nav-item">
+                    <div><a href="deletebill" class="nav-link">删除订单</a></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
     <div class="container">
         <h1>充电订单查询</h1>
         <table class="table">

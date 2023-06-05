@@ -32,6 +32,13 @@ class BillingSystem:
 
         return user_bill_list
 
+    def del_user_bill(self, order_id):
+        cursor = self.db.connection.cursor()
+        sql = """DELETE FROM bill 
+                 WHERE id = %s"""
+        cursor.execute(sql, order_id)
+        self.db.connection.commit()
+
 class Bill:
     def __int__(self):
         self.id = None #初始化可确定
