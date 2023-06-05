@@ -189,9 +189,7 @@ class ChargeSystem(threading.Thread):
                         best_charger.queue.put(self.slow_wait_area_queue.get())
             else:
                 pass
-                # print("慢充桩现在是满的")
-        else:
-            pass
+        #         print("慢充桩现在是满的")
         # print("调度等待区完成")
 
     def cal_remain_need_time(self, current_charge_car, current_time):
@@ -280,7 +278,8 @@ class ChargeSystem(threading.Thread):
                         current_car.charge_need_time = current_car.need_power / item.power_per_hour
                     else:
                         item.use_state = False
-        print("调度充电站完成")
+
+            # print("调度充电站完成")
 
 
 class SimulateTimer():

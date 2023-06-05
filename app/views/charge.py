@@ -10,6 +10,8 @@ charge = Blueprint("charge", __name__)
 @auth
 def index():
     username = session.get('user')
+    if username == "admin":
+        return render_template("admin_home.html")
     if request.method == "GET":
         return render_template("index.html", username=username)
 
@@ -62,7 +64,13 @@ def get_data():
                                               {'charger_queue_size': str(charge_system.slow_charger[1].queue.qsize())},
                                               {'charger_queue_size': str(charge_system.slow_charger[2].queue.qsize())}]},
             'wait_area': {'fast_wait_car_number': str(charge_system.fast_wait_area_queue.qsize()),
-                          'slow_wait_car_number': str(charge_system.slow_wait_area_queue.qsize())}}
+                          'slow_wait_car_number': str(charge_system.slow_wait_area_queue.qsize())},
+            'charger_state': {'fast_charger1': str(charge_system.fast_charger[0].charger_state),
+                              'fast_charger2': str(charge_system.fast_charger[1].charger_state),
+                              'slow_charger1': str(charge_system.slow_charger[0].charger_state),
+                              'slow_charger2': str(charge_system.slow_charger[1].charger_state),
+                              'slow_charger3': str(charge_system.slow_charger[2].charger_state),
+            }}
     return jsonify(data)
 
 

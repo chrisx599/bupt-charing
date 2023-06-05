@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+	<title>波普特充电桩管理系统</title>
+
+
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid" >
+    <a class="navbar-brand" href="#">波普特充电桩管理系统</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/a/waiting">Waiting</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/a/report">Report present</a>
+        </li>
+      </ul>
+      <span class="navbar-text">
+       <button type="button" class="btn btn-light">logout</button>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<div class="container-md" >
+    <div class="accordion accordion-flush" id="accordionFlushExample" >
+        <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button id="fastone" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" onclick="loadContent1()">
+            Fast Charge Pile #1
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+          <button type="button" class="btn btn-success" id="fastbtn1" onclick="change_state(event)"></button>
+            <ul class="list-group">
+              <li class="list-group-item" id="fast11"></li>
+              <li class="list-group-item" id="fast12"></li>
+              <li class="list-group-item" id="fast13"></li>
+              <li class="list-group-item" id="fast14"></li>
+              <li class="list-group-item" id="fast15"></li>
+          </ul>
+        </div>
+      </div>
+        <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo" onclick="loadContent2()">
+            Fast Charge Pile #2
+          </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+            <button type="button" class="btn btn-success" id="fastbtn2" onclick="change_state(event)"></button>
+            <ul class="list-group">
+              <li class="list-group-item" id="fast21"></li>
+              <li class="list-group-item" id="fast22"></li>
+              <li class="list-group-item" id="fast23"></li>
+              <li class="list-group-item" id="fast24"></li>
+              <li class="list-group-item" id="fast25"></li>
+          </ul>
+        </div>
+      </div>
+        <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree" onclick="loadContent3()">
+            Slow Charge Pile #1
+          </button>
+        </h2>
+        <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+            <button type="button" class="btn btn-success" id="slowbtn1" onclick="change_state(event)"></button>
+            <ul class="list-group">
+              <li class="list-group-item" id="slow11"></li>
+              <li class="list-group-item" id="slow12"></li>
+              <li class="list-group-item" id="slow13"></li>
+              <li class="list-group-item" id="slow14"></li>
+              <li class="list-group-item" id="slow15"></li>
+          </ul>
+        </div>
+      </div>
+        <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour" onclick="loadContent4()">
+            Slow Charge Pile #2
+          </button>
+        </h2>
+        <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+          <button type="button" class="btn btn-success" id="slowbtn2" onclick="change_state(event)"></button>
+            <ul class="list-group">
+              <li class="list-group-item" id="slow21"></li>
+              <li class="list-group-item" id="slow22"></li>
+              <li class="list-group-item" id="slow23"></li>
+              <li class="list-group-item" id="slow24"></li>
+              <li class="list-group-item" id="slow25"></li>
+          </ul>
+        </div>
+      </div>
+        <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingFive">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive" onclick="loadContent5()">
+            Slow Charge Pile #3
+          </button>
+        </h2>
+        <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
+            <br/>
+            <button type="button" class="btn btn-success" id="slowbtn3" onclick="change_state(event)"></button>
+            <br/>
+            <ul class="list-group">
+              <li class="list-group-item" id="slow31"></li>
+              <li class="list-group-item" id="slow32"></li>
+              <li class="list-group-item" id="slow33"></li>
+              <li class="list-group-item" id="slow34"></li>
+              <li class="list-group-item" id="slow35"></li>
+          </ul>
+        </div>
+      </div>
+</div>
+
+</div>
+
+
+<script src="../static/js/bootstrap.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="../static/js/admin.js"></script>
+</body>
+
+</html>
