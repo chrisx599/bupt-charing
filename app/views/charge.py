@@ -10,6 +10,8 @@ charge = Blueprint("charge", __name__)
 @auth
 def index():
     username = session.get('user')
+    if username == "admin":
+        return render_template("admin_home.html")
     if request.method == "GET":
         return render_template("index.html", username=username)
 

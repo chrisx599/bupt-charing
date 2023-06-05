@@ -8,11 +8,11 @@ def create_app():
     app.secret_key = "f5ea81gg4s61g68awfa981ber9iuy"
     from .views.login import user_login
     from .views.charge import charge
-
+    from .views.admin import admin
 
     app.register_blueprint(charge)
     app.register_blueprint(user_login)
-
+    app.register_blueprint(admin)
 
 
     return app
