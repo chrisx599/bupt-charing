@@ -1,8 +1,7 @@
 function addScript(url){
 	document.write("<script language=javascript src="+"https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"+"></script>");
 }
-
-function loadContent1() {
+  function loadContent1() {
     axios.get('/a/show/pilesinfo', {
         params:{
             pile_id: 1
@@ -14,7 +13,7 @@ function loadContent1() {
       .catch(error => {
         console.log(error);
       });
-}
+  }
 
   function handleResponse1(response) {
         var infodata = response.data
@@ -36,6 +35,14 @@ function loadContent1() {
         fast12.innerHTML = "累计充电次数:  " + totalTimes
         fast13.innerHTML = "累计充电时长:  " + totalTime
         fast14.innerHTML = "累计充电量:  " + totalEnergy
+        fast16 = document.getElementById("fast16")
+        var carInfo = infodata.carInfo
+        if (carInfo != null) {
+            fast16.innerHTML = "等待车辆用户名:  " + carInfo.user_name +
+                "<br/>等待车辆请求充电量:  " + carInfo.need_power +
+                "<br/>等待车辆排队时长:  " + carInfo.wait_time + "min"
+
+        }
         console.log(infodata)
 
   }
@@ -74,6 +81,15 @@ function loadContent1() {
         fast22.innerHTML = "累计充电次数:  " + totalTimes
         fast23.innerHTML = "累计充电时长:  " + totalTime
         fast24.innerHTML = "累计充电量:  " + totalEnergy
+
+        fast26 = document.getElementById("fast26")
+        var carInfo = infodata.carInfo
+        if (carInfo != null) {
+            fast26.innerHTML = "等待车辆用户名:  " + carInfo.user_name +
+                "<br/>等待车辆请求充电量:  " + carInfo.need_power +
+                "<br/>等待车辆排队时长:  " + carInfo.wait_time + "min"
+
+        }
         console.log(infodata)
 
   }
@@ -112,6 +128,14 @@ function loadContent1() {
         slow13.innerHTML = "累计充电时长:  " + totalTime
         slow14.innerHTML = "累计充电量:  " + totalEnergy
         slow15.innerHTML = "使用状态:  " + isUsing
+        slow16 = document.getElementById("slow16")
+        var carInfo = infodata.carInfo
+        if (carInfo != null) {
+           slow16.innerHTML = "等待车辆用户名:  " + carInfo.user_name +
+                "<br/>等待车辆请求充电量:  " + carInfo.need_power +
+                "<br/>等待车辆排队时长:  " + carInfo.wait_time + "min"
+
+        }
         console.log(infodata)
 
   }
@@ -150,6 +174,14 @@ function loadContent1() {
         slow23.innerHTML = "累计充电时长:  " + totalTime
         slow24.innerHTML = "累计充电量:  " + totalEnergy
         slow25.innerHTML = "使用状态:  " + isUsing
+        slow26 = document.getElementById("slow26")
+        var carInfo = infodata.carInfo
+        if (carInfo != null) {
+           slow26.innerHTML = "等待车辆用户名:  " + carInfo.user_name +
+                "<br/>等待车辆请求充电量:  " + carInfo.need_power +
+                "<br/>等待车辆排队时长:  " + carInfo.wait_time + "min"
+
+        }
         console.log(infodata)
 
   }
@@ -188,6 +220,14 @@ function loadContent1() {
         slow33.innerHTML = "累计充电时长:  " + totalTime
         slow34.innerHTML = "累计充电量:  " + totalEnergy
         slow35.innerHTML = "使用状态:  " + isUsing
+        slow36 = document.getElementById("slow36")
+        var carInfo = infodata.carInfo
+        if (carInfo != null) {
+           slow36.innerHTML = "等待车辆用户名:  " + carInfo.user_name +
+                "<br/>等待车辆请求充电量:  " + carInfo.need_power +
+                "<br/>等待车辆排队时长:  " + carInfo.wait_time + "min"
+
+        }
         console.log(infodata)
 
   }

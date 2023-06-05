@@ -1,5 +1,6 @@
 from .charger_system import Car
 from flask import Flask, render_template, request, redirect, session, Blueprint, jsonify
+import uuid
 from .login import auth
 from .. import charge_system
 from .. import billing_system
@@ -19,7 +20,11 @@ def index():
     car_id = request.form.get('car_id')
     car_need_power = request.form.get('car_need_power')
 
+    order_id = uuid.uuid1()
+    print(order_id)
+    print(type(order_id))
     val = []
+    val.append(order_id)
     val.append(charge_system.timer.get_simulate_time())
 
     if(charge_mode == 'fast'):
@@ -37,21 +42,27 @@ def index():
     if charge_mode == 'fast':
         # 查看等待区是否还有位置
         if not charge_system.is_wait_area_full():
-            request_car = Car(username, car_id, car_need_power, charge_mode)
+            request_car = Car(username, car_id, car_need_power, charge_mode, order_id)
             charge_system.fast_wait_area_queue.put(request_car)
-            print("快充等待区数量:", charge_system.fast_wait_area_queue.qsize())
+            # print("快充等待区数量:", charge_system.fast_wait_area_queue.qsize())
             billing_system.add_user_bill(val)
             temp_list = billing_system.get_user_bill(username)
             return "add fast true"
+            info = "快充订单成功"
+            return render_template("index.html", info=info)
+            # return "add fast true"
         else:
-            return "add fast false"
+            info = "快充订单失败"
+            return render_template("index.html", info=info)
     elif charge_mode == 'slow':
         if not charge_system.is_wait_area_full():
-            request_car = Car(username, car_id, car_need_power, charge_mode)
+            request_car = Car(username, car_id, car_need_power, charge_mode, order_id)
             charge_system.slow_wait_area_queue.put(request_car)
-            return "add slow true"
+            info = "慢充订单成功"
+            return render_template("index.html", info=info)
         else:
-            return "add slow false"
+            info = "慢充订单失败"
+            return render_template("index.html", info=info)
     else:
         return "error"
 

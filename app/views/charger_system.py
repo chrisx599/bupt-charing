@@ -35,7 +35,7 @@ class SlowCharger(Charger):
         self.power_per_hour = 7.0
 
 class Car():
-    def __init__(self, user_name, car_id, need_power, charge_mode) -> None:
+    def __init__(self, user_name, car_id, need_power, charge_mode, order_id) -> None:
         self.user_name = user_name
         self.car_id = car_id
         self.need_power = float(need_power)
@@ -46,7 +46,9 @@ class Car():
         self.charge_need_time = None
         self.remain_charge_time = None
         self.already_charge_time = None
-        self.charge_mode = None
+        self.charge_mode = charge_mode
+        self.order_id = order_id
+        # self.charger_num = None
         
 
 def init_charger():
@@ -150,6 +152,7 @@ class ChargeSystem(threading.Thread):
                     # 如果能放
                     # 将等待区的先来的车放入需要等待时间最少的充电桩队列中
                     if best_charger:
+                        self.fast_wait_area_queue.queue[0].join_charge_queue_time = self.timer.get_simulate_time()
                         best_charger.queue.put(self.fast_wait_area_queue.get())
             else:
                 pass
@@ -186,6 +189,7 @@ class ChargeSystem(threading.Thread):
                     # 如果能放
                     # 将等待区的先来的车放入需要等待时间最少的充电桩队列中
                     if best_charger:
+                        self.slow_wait_area_queue.queue[0].join_charge_queue_time = self.timer.get_simulate_time()
                         best_charger.queue.put(self.slow_wait_area_queue.get())
             else:
                 pass
@@ -279,7 +283,7 @@ class ChargeSystem(threading.Thread):
                     else:
                         item.use_state = False
 
-            print("调度充电站完成")
+            # print("调度充电站完成")
 
 
 class SimulateTimer():
