@@ -94,6 +94,23 @@ function updateWaitArea(data) {
     }
 }
 
+function updateCharger(data) {
+    if (data['charger_state']['fast_charger1'] === 'False') {
+        document.getElementById('fast_charger1').textContent = '快充桩 1: 已关闭';
+    }
+    if (data['charger_state']['fast_charger2'] === 'False') {
+        document.getElementById('fast_charger2').textContent = '快充桩 2: 已关闭';
+    }
+    if (data['charger_state']['slow_charger1'] === 'False') {
+        document.getElementById('slow_charger1').textContent = '慢充桩 1: 已关闭';
+    }
+    if (data['charger_state']['slow_charger2'] === 'False') {
+        document.getElementById('slow_charger2').textContent = '慢充桩 2: 已关闭';
+    }
+    if (data['charger_state']['slow_charger3'] === 'False') {
+        document.getElementById('slow_charger3').textContent = '慢充桩 3: 已关闭';
+    }
+}
 
 function updateData() {
     fetch('/api/data')
@@ -103,6 +120,8 @@ function updateData() {
             updateChargeArea(data)
             // 更新等待区
             updateWaitArea(data)
+            // 更新充电桩状态
+            updateCharger(data)
         });
 }
 

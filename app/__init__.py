@@ -26,4 +26,5 @@ def get_charge_system():
     charge_system = ChargeSystem()
     return charge_system
 
+db = get_db()
 charge_system = get_charge_system()
