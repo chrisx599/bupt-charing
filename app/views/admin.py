@@ -20,7 +20,6 @@ def pile_info():
             "totalTime": pile.total_charge_time,
             "totalEnergy": pile.total_charge_power,
             "isUsing": pile.use_state}
-
     # print(data)
     return jsonify(data)
 
