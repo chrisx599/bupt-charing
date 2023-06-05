@@ -8,5 +8,17 @@ bill = Blueprint("bill", __name__)
 @bill.route("/bill",methods=["GET", "POST"])
 @auth
 def tobill():
-    username = session.get('username')
+    username = session.get('user')
+    return render_template('bill.html')
+
+@bill.route("/changebill",methods=["GET", "POST"])
+@auth
+def tobill():
+    username = session.get('user')
+    return render_template('bill.html')
+
+@bill.route("/deletebill",methods=["GET", "POST"])
+@auth
+def tobill():
+    username = session.get('user')
     return render_template('bill.html')
