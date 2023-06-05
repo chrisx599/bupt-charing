@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
-from .database import DBConfig
 from .views.charger_system import ChargeSystem
-
+from .views.billing_system import BillingSystem
+from .database import DBConfig
 
 def create_app():
     app = Flask(__name__)
@@ -26,4 +26,11 @@ def get_charge_system():
     charge_system = ChargeSystem()
     return charge_system
 
+
+def get_billing_system(db):
+    billing_system = BillingSystem(db)
+    return billing_system
+
+db = get_db()
 charge_system = get_charge_system()
+billing_system = get_billing_system(db)

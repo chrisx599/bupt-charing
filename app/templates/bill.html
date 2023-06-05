@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>充电订单查询</title>
+</head>
+<body>
+	<h1>充电订单查询</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>订单号</th>
+				<th>充电桩编号</th>
+				<th>开始时间</th>
+				<th>结束时间</th>
+				<th>状态</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><a href="#order1">2021060101</a></td>
+				<td>CP001</td>
+				<td>2021-06-01 10:00:00</td>
+				<td>2021-06-01 11:00:00</td>
+				<td>已完成</td>
+			</tr>
+			<tr>
+				<td><a href="#order2">2021060102</a></td>
+				<td>CP002</td>
+				<td>2021-06-01 11:00:00</td>
+				<td>2021-06-01 12:00:00</td>
+				<td>已完成</td>
+			</tr>
+			<tr>
+				<td><a href="#order3">2021060201</a></td>
+				<td>CP003</td>
+				<td>2021-06-02 10:00:00</td>
+				<td>2021-06-02 11:00:00</td>
+				<td>已取消</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="order1" class="order-details">
+		<h2>订单详情：2021060101</h2>
+		<p>充电桩编号：CP001</p>
+		<p>开始时间：2021-06-01 10:00:00</p>
+		<p>结束时间：2021-06-01 11:00:00</p>
+		<p>电量：10kWh</p>
+		<p>费用：20元</p>
+	</div>
+	<div id="order2" class="order-details">
+		<h2>订单详情：2021060102</h2>
+		<p>充电桩编号：CP002</p>
+		<p>开始时间：2021-06-01 11:00:00</p>
+		<p>结束时间：2021-06-01 12:00:00</p>
+		<p>电量：12kWh</p>
+		<p>费用：24元</p>
+	</div>
+	<div id="order3" class="order-details">
+		<h2>订单详情：2021060201</h2>
+		<p>充电桩编号：CP003</p>
+		<p>开始时间：2021-06-02 10:00:00</p>
+		<p>结束时间：2021-06-02 11:00:00</p>
+		<p>电量：8kWh</p>
+		<p>费用：16元</p>
+	</div>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="zh-CN">-->
+<!--<head>-->
+<!--	<meta charset="UTF-8">-->
+<!--	<title>充电订单查询</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--	<h1>充电订单查询</h1>-->
+<!--	<table>-->
+<!--		<thead>-->
+<!--			<tr>-->
+<!--				<th>订单号</th>-->
+<!--				<th>充电桩编号</th>-->
+<!--				<th>开始时间</th>-->
+<!--				<th>结束时间</th>-->
+<!--				<th>状态</th>-->
+<!--			</tr>-->
+<!--		</thead>-->
+<!--		<tbody>-->
+<!--			{% for order in orders %}-->
+<!--			<tr>-->
+<!--				<td><a href="#order{{ order.id }}">{{ order.id }}</a></td>-->
+<!--				<td>{{ order.charging_pile }}</td>-->
+<!--				<td>{{ order.start_time }}</td>-->
+<!--				<td>{{ order.end_time }}</td>-->
+<!--				<td>{{ order.status }}</td>-->
+<!--			</tr>-->
+<!--			{% endfor %}-->
+<!--		</tbody>-->
+<!--	</table>-->
+<!--	{% for order in orders %}-->
+<!--	<div id="order{{ order.id }}" class="order-details">-->
+<!--		<h2>订单详情：{{ order.id }}</h2>-->
+<!--		<p>充电桩编号：{{ order.charging_pile }}</p>-->
+<!--		<p>开始时间：{{ order.start_time }}</p>-->
+<!--		<p>结束时间：{{ order.end_time }}</p>-->
+<!--		<p>电量：{{ order.power }}kWh</p>-->
+<!--		<p>费用：{{ order.cost }}元</p>-->
+<!--	</div>-->
+<!--	{% endfor %}-->
+<!--</body>-->
+<!--</html>-->

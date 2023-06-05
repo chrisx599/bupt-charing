@@ -2,7 +2,7 @@ from .charger_system import Car
 from flask import Flask, render_template, request, redirect, session, Blueprint, jsonify
 from .login import auth
 from .. import charge_system
-
+from .. import billing_system
 charge = Blueprint("charge", __name__)
 
 # 域名后面跟的东西
@@ -16,6 +16,21 @@ def index():
     charge_mode = request.form.get('charge_mode')
     car_id = request.form.get('car_id')
     car_need_power = request.form.get('car_need_power')
+
+    val = []
+    val.append(charge_system.timer.get_simulate_time())
+
+    if(charge_mode == 'fast'):
+        val.append(int(car_need_power) / 30)
+    else:
+        val.append(int(car_need_power) / 7)
+
+    val.append(int(car_need_power))
+    val.append(int(car_need_power) * 0.7)
+    val.append(int(car_need_power) * 0.8)
+    val.append(int(car_need_power) * 0.7 + int(car_need_power) * 0.8)
+    val.append(username)
+
     # 充电模式分类
     if charge_mode == 'fast':
         # 查看等待区是否还有位置
@@ -23,6 +38,7 @@ def index():
             request_car = Car(username, car_id, car_need_power, charge_mode)
             charge_system.fast_wait_area_queue.put(request_car)
             print("快充等待区数量:", charge_system.fast_wait_area_queue.qsize())
+            billing_system.add_user_bill(val)
             return "add fast true"
         else:
             return "add fast false"

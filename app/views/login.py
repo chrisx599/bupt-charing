@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, Blueprint
 import functools
-from app import get_db
+from .. import db
 
-db = get_db()
 user_login = Blueprint("login", __name__)
 
 def auth(func):
