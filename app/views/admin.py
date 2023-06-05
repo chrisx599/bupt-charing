@@ -10,33 +10,30 @@ admin = Blueprint("admin", __name__)
 @admin.route("/a/show/pilesinfo")
 def pile_info():
     # 整合时放开注释
-    # pile_id = request.args.get("pile_id")
-    # if pile_id < 3:
-    #     pile = charge_system.fast_charger[pile_id - 1]
-    # else:
-    #     pile = charge_system.slow_charger[pile_id - 3]
-    # data = {"isWorking": pile.charge_state,
-    #         "totalTimes":pile.total_times,
-    #         "totalTime":pile.total_charge_time,
-    #         "totalEnergy":pile.total_charge_power}
-    # 整合时注释此函数的中下面这个data
-    data = {"isUsing" : False,
-            "isWorking": True,
-            "totalTimes": 3,
-            "totalTime": 203,
-            "totalEnergy": 750}
+    pile_id = int(request.args.get("pile_id"))
+    if pile_id < 3:
+        pile = charge_system.fast_charger[pile_id - 1]
+    else:
+        pile = charge_system.slow_charger[pile_id - 3]
+    data = {"isWorking": pile.charger_state,
+            "totalTimes": pile.total_times,
+            "totalTime": pile.total_charge_time,
+            "totalEnergy": pile.total_charge_power,
+            "isUsing": pile.use_state}
 
+    # print(data)
     return jsonify(data)
 
 @admin.route("/a/changeState")
 def changeState():
-    # 整合时放开注释
-    # pile_id = request.args.get("pile_id")
-    # if pile_id < 3:
-    #     pile = charge_system.fast_charger[pile_id - 1]
-    # else:
-    #     pile = charge_system.slow_charger[pile_id - 3]
-    # pile.charger_state = not pile.charger_state
+
+    pile_id = int(request.args.get("pile_id"))
+    if pile_id < 3:
+        pile = charge_system.fast_charger[pile_id - 1]
+    else:
+        pile = charge_system.slow_charger[pile_id - 3]
+    pile.charger_state = not pile.charger_state
+
     data = {"status_code": True}
     return jsonify(data)
 
@@ -76,9 +73,10 @@ def logout():
     # 退出登录如果需要清除一些数据可以在这里清除
     # 没有cookies，不需要清除cookies
     # session中没有管理员信息
+    session.clear()
+    return render_template('login.html')
     # return render_template()
     # 前端关联事件未绑定
-    pass
 
 
 if __name__ == "__main__":

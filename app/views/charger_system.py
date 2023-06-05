@@ -105,16 +105,16 @@ class ChargeSystem(threading.Thread):
             # 更新充电区每个充电桩的状态
             self.update_charger_station()
 
-            print("等待区快充等待队列", self.fast_wait_area_queue.qsize())
-            print("快充1队列", self.fast_charger[0].queue.qsize())
-            print("快充2队列", self.fast_charger[1].queue.qsize())
-            print("快充1状态", self.fast_charger[0].use_state)
-            print("快充2状态", self.fast_charger[1].use_state)
+            # print("等待区快充等待队列", self.fast_wait_area_queue.qsize())
+            # print("快充1队列", self.fast_charger[0].queue.qsize())
+            # print("快充2队列", self.fast_charger[1].queue.qsize())
+            # print("快充1状态", self.fast_charger[0].use_state)
+            # print("快充2状态", self.fast_charger[1].use_state)
 
 
 
     def update_wait_station(self):
-        print("正在调度等待区")
+        # print("正在调度等待区")
         # 更新等待区的状态
         # 快充等待队列
         if not self.fast_wait_area_queue.empty():
@@ -151,7 +151,8 @@ class ChargeSystem(threading.Thread):
                     if best_charger:
                         best_charger.queue.put(self.fast_wait_area_queue.get())
             else:
-                print("快充桩现在是满的")
+                pass
+                # print("快充桩现在是满的")
 
         if not self.slow_wait_area_queue.empty():
             is_all_charger_queue_full = True
@@ -186,8 +187,9 @@ class ChargeSystem(threading.Thread):
                     if best_charger:
                         best_charger.queue.put(self.slow_wait_area_queue.get())
             else:
-                print("慢充桩现在是满的")
-        print("调度等待区完成")
+                pass
+        #         print("慢充桩现在是满的")
+        # print("调度等待区完成")
 
     def cal_remain_need_time(self, current_charge_car, current_time):
         # current_charge_car = Car()  # TODO:方便写代码
@@ -208,7 +210,7 @@ class ChargeSystem(threading.Thread):
         return False
 
     def update_charger_station(self):
-        print("正在调度充电站")
+        # print("正在调度充电站")
         # 更新充电区每个充电桩的状态
         # 检查快充的状态
         for item in self.fast_charger:
@@ -230,7 +232,7 @@ class ChargeSystem(threading.Thread):
                 current_time = time.time()
                 current_car = item.queue.queue[0]
                 alread_charge_time = self.cal_alread_charge_time(current_car, current_time)
-                print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
+                # print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
                 if alread_charge_time >= current_car.charge_need_time:
                     item.total_times += 1
                     item.total_charge_time += current_car.charge_need_time
@@ -262,7 +264,7 @@ class ChargeSystem(threading.Thread):
                 current_time = time.time()
                 current_car = item.queue.queue[0]
                 alread_charge_time = self.cal_alread_charge_time(current_car, current_time)
-                print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
+                # print(f"已经充电{alread_charge_time},总共需要{current_car.charge_need_time}")
                 if alread_charge_time >= current_car.charge_need_time:
                     item.total_times += 1
                     item.total_charge_time += current_car.charge_need_time
@@ -276,7 +278,7 @@ class ChargeSystem(threading.Thread):
                     else:
                         item.use_state = False
 
-            print("调度充电站完成")
+            # print("调度充电站完成")
 
 
 class SimulateTimer():

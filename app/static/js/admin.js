@@ -1,7 +1,8 @@
 function addScript(url){
 	document.write("<script language=javascript src="+"https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"+"></script>");
 }
-  function loadContent1() {
+
+function loadContent1() {
     axios.get('/a/show/pilesinfo', {
         params:{
             pile_id: 1
@@ -13,7 +14,7 @@ function addScript(url){
       .catch(error => {
         console.log(error);
       });
-  }
+}
 
   function handleResponse1(response) {
         var infodata = response.data
