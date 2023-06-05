@@ -24,8 +24,8 @@ def get_db():
     return db
 
 
-def get_charge_system():
-    charge_system = ChargeSystem()
+def get_charge_system(db):
+    charge_system = ChargeSystem(db)
     return charge_system
 
 
@@ -34,5 +34,5 @@ def get_billing_system(db):
     return billing_system
 
 db = get_db()
-charge_system = get_charge_system()
+charge_system = get_charge_system(db)
 billing_system = get_billing_system(db)

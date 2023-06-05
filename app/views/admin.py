@@ -61,27 +61,28 @@ def get_reports():
     # 查看数据库表得到详细数据类型，以下只是一个样例，数据类型和表中类型不相同
     # 构建jsonData时要求日期必须是字符串
 
-    jsonData = {
-        "rows": [
-            [1, "2012-5-3", 3, 3, 120, 150, 120, 120, 120],
-            [],
-            [],
-        ]
-    }
 
     cursor = db.connection.cursor()
     # sql语句
-    sql = """
-            select *
-            from `bill`
-        """
+    sql = """SELECT DATE(time), charger_num, COUNT(*) AS row_count, SUM(charge_time), SUM(charge_degree) , 
+             SUM(charge_cost), SUM(service_cost), SUM(total_cost)
+             FROM bill 
+             GROUP BY charger_num, DATE(time)"""
     # 执行sql语句
     cursor.execute(sql)
     result = cursor.fetchall()
-    # print(result)
-    # for item in result:
-    #     temp = [item[0], str(item[1]), item[], item[], item[], item[], item[], item[], item[]]
-    #     jsonData['rows'].append()
+    print(result)
+    # 时间(日、周、月)、
+    # 充电桩编号、累计充电次数、累计充电时长、累计充电量、累计充电费用、累计服
+    # 务费用、累计总费用。
+
+    jsonData = {'rows': []}
+    for item in result:
+        if str(item[1]) == 'None':
+            temp = [item[0], '未完成', item[2], item[3], item[4], item[5], item[6], item[7]]
+        else:
+            temp = [item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]]
+        jsonData['rows'].append(temp)
 
     return jsonify(jsonData)
 
