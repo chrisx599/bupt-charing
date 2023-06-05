@@ -15,6 +15,22 @@ class BillingSystem:
         cursor.execute(sql, tuple(data_list))
         self.db.connection.commit()
 
+    def get_user_bill(self,username):
+        cursor = self.db.connection.cursor()
+        sql = """
+            select*
+            from bill
+            where user_name = %s
+            """
+        cursor.execute(sql, username)
+        user_bill_list = []
+        result = cursor.fetchall()
+
+        for row in result:
+            user_bill_list.append(row)
+            # print(row)
+
+        return user_bill_list
 
 class Bill:
     def __int__(self):

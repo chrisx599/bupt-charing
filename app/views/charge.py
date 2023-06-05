@@ -41,6 +41,7 @@ def index():
             charge_system.fast_wait_area_queue.put(request_car)
             print("快充等待区数量:", charge_system.fast_wait_area_queue.qsize())
             billing_system.add_user_bill(val)
+            temp_list = billing_system.get_user_bill(username)
             return "add fast true"
         else:
             return "add fast false"
