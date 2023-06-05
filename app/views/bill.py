@@ -9,16 +9,6 @@ bill = Blueprint("bill", __name__)
 @auth
 def tobill():
     username = session.get('user')
-    return render_template('bill.html')
-
-@bill.route("/changebill",methods=["GET", "POST"])
-@auth
-def tobill():
-    username = session.get('user')
-    return render_template('bill.html')
-
-@bill.route("/deletebill",methods=["GET", "POST"])
-@auth
-def tobill():
-    username = session.get('user')
-    return render_template('bill.html')
+    data_list = billing_system.get_user_bill(username)
+    print(data_list)
+    return render_template('bill.html',order=data_list)
