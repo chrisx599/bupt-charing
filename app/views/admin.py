@@ -43,11 +43,11 @@ def new_order_and_schedu(car: Car):
     val.append(charge_system.timer.get_simulate_time())
 
     if (car.charge_mode == 'fast'):
-        val.append(int(car.need_power) / 30)
+        val.append(float(car.need_power) / 30)
     else:
-        val.append(int(car.need_power) / 7)
+        val.append(float(car.need_power) / 7)
 
-    val.append(int(car.need_power))
+    val.append(float(car.need_power))
     # val.append(int(car_need_power) * 0.7)
     # val.append(int(car_need_power) * 0.8)
     # val.append(int(car_need_power) * 0.7 + int(car_need_power) * 0.8)

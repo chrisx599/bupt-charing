@@ -368,7 +368,7 @@ class SimulateTimer():
     def __init__(self) -> None:
         self.time = {'year': 2023, 'month': 6, 'date': 1, 'hour': 1, 'minute': 0}
         self.timer_flag = True
-        self.simulate_time()
+        # self.simulate_time()
 
     def simulate_time(self):
         self.timer = threading.Timer(0.5, self.update_time)  # 每0.5s模拟1分钟,每30s模拟1小时
@@ -421,4 +421,41 @@ class SimulateTimer():
 
     def close_timer(self):
         self.timer_flag = False
+
+    def simulate_time_by_hand(self):
+        if self.time['minute'] == 50:
+            self.time['minute'] = 0
+            self.time['hour'] += 1
+            if self.time['hour'] == 24:
+                self.time['hour'] = 0
+                self.time['date'] += 1
+                if self.time['month'] in [1, 3, 5, 7, 8, 10, 12]:
+                    if self.time['date'] == 32:
+                        self.time['date'] = 1
+                        self.time['month'] += 1
+                    else:
+                        self.time['date'] += 1
+                elif self.time['month'] in [4, 6, 9, 11]:
+                    if self.time['date'] == 31:
+                        self.time['date'] = 1
+                        self.time['month'] += 1
+                    else:
+                        self.time['date'] += 1
+                else:
+                    if self.time['date'] == 29:
+                        self.time['date'] = 1
+                        self.time['month'] += 1
+                    else:
+                        self.time['date'] += 1
+                if self.time['month'] == 12:
+                    self.time['month'] = 1
+                    self.time['year'] += 1
+                else:
+                    self.time['month'] += 1
+            else:
+                self.time['hour'] += 1
+        else:
+            self.time['minute'] += 10
+
+
 

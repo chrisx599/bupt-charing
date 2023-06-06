@@ -29,12 +29,12 @@ def index():
     val.append(charge_system.timer.get_simulate_time())
 
     if(charge_mode == 'fast'):
-        val.append(int(car_need_power) / 30)
+        val.append(float(car_need_power) / 30)
     else:
-        val.append(int(car_need_power) / 7)
+        val.append(float(car_need_power) / 7)
 
 
-    val.append(int(car_need_power))
+    val.append(float(car_need_power))
     # val.append(int(car_need_power) * 0.7)
     # val.append(int(car_need_power) * 0.8)
     # val.append(int(car_need_power) * 0.7 + int(car_need_power) * 0.8)
@@ -88,6 +88,14 @@ def get_data():
                               'slow_charger3': str(charge_system.slow_charger[2].charger_state),
             }}
     return jsonify(data)
+
+@charge.route('/api/time', methods=['GET', 'POST'])
+def get_time():
+    # 返回最新的数据
+    # 分两个区充电区和等待区
+    charge_system.timer.simulate_time_by_hand()
+    print(charge_system.timer.get_simulate_time())
+    return render_template('simulate_time.html')
 
 
 
