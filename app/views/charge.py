@@ -48,8 +48,8 @@ def index():
             charge_system.fast_wait_area_queue.put(request_car)
             # print("快充等待区数量:", charge_system.fast_wait_area_queue.qsize())
             billing_system.add_user_bill(val)
-            temp_list = billing_system.get_user_bill(username)
-            print(temp_list)
+            billing_system.get_user_bill(username)
+            # print(temp_list)
             info = "快充订单成功"
             return render_template("index.html", info=info)
             # return "add fast true"
@@ -60,6 +60,8 @@ def index():
         if not charge_system.is_wait_area_full():
             request_car = Car(username, car_id, car_need_power, charge_mode, order_id)
             charge_system.slow_wait_area_queue.put(request_car)
+            billing_system.add_user_bill(val)
+            billing_system.get_user_bill(username)
             info = "慢充订单成功"
             return render_template("index.html", info=info)
         else:

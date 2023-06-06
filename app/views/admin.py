@@ -2,8 +2,12 @@
 # @FileName : admin.py
 # @Time     : 2023/6/4 12:46
 # @Author   : qingyao
+# @CoAuthor : Chr1ce
+import time
+import uuid
 from flask import Flask, render_template, request, redirect, session, Blueprint, make_response,jsonify
-from .. import charge_system, db
+from .. import charge_system, db, billing_system
+from .charger_system import Car
 
 admin = Blueprint("admin", __name__)
 
@@ -33,14 +37,102 @@ def pile_info():
     # print(data)
     return jsonify(data)
 
+def new_order_and_schedu(car: Car):
+    val = []
+    val.append(car.order_id)
+    val.append(charge_system.timer.get_simulate_time())
+
+    if (car.charge_mode == 'fast'):
+        val.append(int(car.need_power) / 30)
+    else:
+        val.append(int(car.need_power) / 7)
+
+    val.append(int(car.need_power))
+    # val.append(int(car_need_power) * 0.7)
+    # val.append(int(car_need_power) * 0.8)
+    # val.append(int(car_need_power) * 0.7 + int(car_need_power) * 0.8)
+    val.append(car.user_name)
+
+    # 充电模式分类
+    if car.charge_mode == 'fast':
+        # 查看等待区是否还有位置
+        if not charge_system.is_wait_area_full():
+            # request_car = Car(username, car_id, car_need_power, charge_mode, order_id)
+            charge_system.fast_wait_area_queue.put(car)
+            # print("快充等待区数量:", charge_system.fast_wait_area_queue.qsize())
+            billing_system.add_user_bill(val)
+            billing_system.get_user_bill(car.user_name)
+            return 1
+        else:
+            return -1
+    elif car.charge_mode == 'slow':
+        if not charge_system.is_wait_area_full():
+            # request_car = Car(username, car_id, car_need_power, charge_mode, order_id)
+            charge_system.slow_wait_area_queue.put(car)
+            billing_system.add_user_bill(val)
+            billing_system.get_user_bill(car.user_name)
+            return 2
+        else:
+            return -2
+
 @admin.route("/a/changeState")
 def changeState():
-
+    # 修改充电桩状态
+    # 分充电桩队列里面有车和充电桩队列里面没有车
     pile_id = int(request.args.get("pile_id"))
     if pile_id < 3:
         pile = charge_system.fast_charger[pile_id - 1]
+        if pile.charger_state:
+            # 充电桩队列里面没有车, 关闭没有影响
+            # 充电桩队列里面有车, 关闭之后需要重新调度队列里面的车
+            if not pile.queue.empty():
+                # 充电桩队列里面的车也需要分类型, 正在充电的车和等待充电的车
+                # pile_queue_size = pile.queue.qsize()
+                # for i in range(pile_queue_size):
+                #     pass
+                for car in pile.queue.queue.copy():
+                    # 直接调用billing_system中的del_car_in_queue
+                    # 如果是正在充电的车
+                    if car.is_charge_now:
+                        current_time = time.time()
+                        alread_charge_power = (current_time - car.start_charge_time) * 120 / 3600
+                        if car.charge_mode == 'fast':
+                            alread_charge_power *= 30
+                        else:
+                            alread_charge_power *= 7
+                        new_car_need_power = car.need_power - alread_charge_power
+                        new_order_id = str(uuid.uuid1())
+                        new_car = Car(car.user_name, car.car_id, new_car_need_power, car.charge_mode, new_order_id)
+                        new_order_and_schedu(new_car)
+                    # 删除旧车订单
+                    billing_system.del_user_bill(car.order_id)
+                    # if car.is_charge_now:
+                    #     # 停止充电, 生成账单, 重新调度
+
     else:
         pile = charge_system.slow_charger[pile_id - 3]
+        if pile.charger_state:
+            if not pile.queue.empty():
+                # 充电桩队列里面的车也需要分类型, 正在充电的车和等待充电的车
+                # pile_queue_size = pile.queue.qsize()
+                for car in pile.queue.queue.copy():
+                    # 直接调用billing_system中的del_car_in_queue
+                    # 如果是正在充电的车
+                    if car.is_charge_now:
+                        current_time = time.time()
+                        alread_charge_power = (current_time - car.start_charge_time) * 120 / 3600
+                        if car.charge_mode == 'fast':
+                            alread_charge_power *= 30
+                        else:
+                            alread_charge_power *= 7
+                        new_car_need_power = car.need_power - alread_charge_power
+                        new_order_id = str(uuid.uuid1())
+                        new_car = Car(car.user_name, car.car_id, new_car_need_power, car.charge_mode, new_order_id)
+                        new_order_and_schedu(new_car)
+                    # 删除旧车订单
+                    billing_system.del_user_bill(car.order_id)
+                    # if car.is_charge_now:
+                    #     # 停止充电, 生成账单, 重新调度
     pile.charger_state = not pile.charger_state
 
     data = {"status_code": True}

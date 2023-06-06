@@ -2,6 +2,7 @@ import queue
 import threading
 import time
 import datetime
+from .billing_system import BillingSystem
 
 
 class Charger():
@@ -276,7 +277,8 @@ class ChargeSystem(threading.Thread):
                     item.total_charge_power += current_car.need_power
                     # current_car.charger_num = 'f' + str(charger_num)
                     self.update_data_table(current_car)
-                    item.queue.get()
+                    self.update_bill_info(item.queue.get())
+                    # item.queue.get()
                     # 看队列里有没车
                     if not item.queue.empty():
                         current_car = item.queue.queue[0]
@@ -318,7 +320,8 @@ class ChargeSystem(threading.Thread):
                     item.total_charge_power += current_car.need_power
                     # current_car.charger_num = 's' + str(charger_num)
                     self.update_data_table(current_car)
-                    item.queue.get()
+                    self.update_bill_info(item.queue.get())
+                    # item.queue.get()
                     # 看队列里有没车
                     if not item.queue.empty():
                         current_car = item.queue.queue[0]
@@ -344,7 +347,22 @@ class ChargeSystem(threading.Thread):
         self.db.connection.commit()
         # cursor.close()
 
-
+    def update_bill_info(self, car: Car):
+        cursor = self.db.connection.cursor()
+        # sql语句
+        sql = """UPDATE bill
+                 SET charge_cost = %s, service_cost = %s, total_cost = %s
+                 WHERE id = %s"""
+        # 执行sql语句
+        start_charge_simulate_time = str(car.start_charge_simulate_time.hour) + ':' \
+                                     + str(car.start_charge_simulate_time.minute)
+        current_simulate_time = str(self.timer.get_simulate_time().hour) + ':' \
+                                + str(self.timer.get_simulate_time().minute)
+        charge_cost ,service_cost = BillingSystem.calculate_charging_cost(car.charge_mode, start_charge_simulate_time,
+                                                                          current_simulate_time, 1.0, 0.7, 0.4)
+        total_cost = charge_cost + service_cost
+        cursor.execute(sql, [charge_cost, service_cost, total_cost, car.order_id])
+        self.db.connection.commit()
 
 class SimulateTimer():
     def __init__(self) -> None:

@@ -1,4 +1,24 @@
 import time
+import uuid
+
+class Car():
+    def __init__(self, user_name, car_id, need_power, charge_mode, order_id) -> None:
+        self.user_name = user_name
+        self.car_id = car_id
+        self.need_power = float(need_power)
+        self.join_wait_area_time = None
+        self.join_charge_queue_time = None
+        self.start_charge_time = None
+        self.over_charge_time = None
+        self.charge_need_time = None
+        self.remain_charge_time = None
+        self.already_charge_time = None
+        self.charge_mode = charge_mode
+        self.order_id = order_id
+        self.charger_num = None
+        self.is_in_charger_queue_state = False
+        self.is_charge_now = False
+        self.start_charge_simulate_time = None
 
 
 class BillingSystem:
@@ -73,8 +93,8 @@ class BillingSystem:
                         self.charge_system.fast_charger[num].use_state = False
                         self.charge_system.fast_charger[num].queue.get()
                         return
-                    else:
-                        self.charge_system.fast_charger[num].queue.queue.pop()
+                else:
+                    self.charge_system.fast_charger[num].queue.queue.pop()
                 # self.del_car_in_queue(self.charge_system.fast_charger[num].queue, order_id)
             elif car.charger_num[0] == 's':
                 if car.is_charge_now:
@@ -94,15 +114,54 @@ class BillingSystem:
                         self.charge_system.slow_charger[num].use_state = False
                         self.charge_system.slow_charger[num].queue.get()
                         return
-                    else:
-                        self.charge_system.slow_charger[num].queue.queue.pop()
+                else:
+                    self.charge_system.slow_charger[num].queue.queue.pop()
                 # self.del_car_in_queue(self.charge_system.slow_charger[num].queue, order_id)
         sql = """DELETE FROM bill 
                  WHERE id = %s"""
         cursor.execute(sql, order_id)
         self.db.connection.commit()
 
-    def calculate_charging_cost(self, mode: str, start_time, end_time, peak_rate, standard_rate, off_peak_rate):
+    def new_order_and_schedu(self, car: Car):
+        val = []
+        val.append(car.order_id)
+        val.append(self.charge_system.timer.get_simulate_time())
+
+        if (car.charge_mode == 'fast'):
+            val.append(int(car.need_power) / 30)
+        else:
+            val.append(int(car.need_power) / 7)
+
+        val.append(int(car.need_power))
+        # val.append(int(car_need_power) * 0.7)
+        # val.append(int(car_need_power) * 0.8)
+        # val.append(int(car_need_power) * 0.7 + int(car_need_power) * 0.8)
+        val.append(car.user_name)
+
+        # 充电模式分类
+        if car.charge_mode == 'fast':
+            # 查看等待区是否还有位置
+            if not self.charge_system.is_wait_area_full():
+                # request_car = Car(username, car_id, car_need_power, charge_mode, order_id)
+                self.charge_system.fast_wait_area_queue.put(car)
+                # print("快充等待区数量:", charge_system.fast_wait_area_queue.qsize())
+                self.add_user_bill(val)
+                self.get_user_bill(car.user_name)
+                return 1
+            else:
+                return -1
+        elif car.charge_mode == 'slow':
+            if not self.charge_system.is_wait_area_full():
+                # request_car = Car(username, car_id, car_need_power, charge_mode, order_id)
+                self.charge_system.slow_wait_area_queue.put(car)
+                self.add_user_bill(val)
+                self.get_user_bill(car.user_name)
+                return 2
+            else:
+                return -2
+
+    @staticmethod
+    def calculate_charging_cost(mode: str, start_time, end_time, peak_rate, standard_rate, off_peak_rate):
         """
         计算充电费用
         :param start_time: 充电开始时间，格式为"HH:MM"，例如"08:30"
@@ -180,6 +239,20 @@ class BillingSystem:
 
         return total_cost, service_cost
 
+    def edit_user_bill(self, order_id, charge_mode, charge_power):
+        """
+        修改用户订单信息
+        """
+        # 修改充电模式和充电量
+        car = self.return_car_by_id(order_id)
+        new_order_id = uuid.uuid1()
+        new_car = Car(car.user_name, car.car_id, charge_power, charge_mode, new_order_id)
+        self.new_order_and_schedu(new_car)
+        # 删除旧车订单
+        self.del_user_bill(order_id)
+
+
+
     def del_car_in_wait_area_queue(self, queue, element_to_remove):
         queue_size = queue.qsize()  # 获取队列的大小
         for i in range(queue_size):
@@ -217,6 +290,8 @@ class BillingSystem:
                 if element == element_to_find:
                     return queue.queue[i]
 
+
+
 class Bill:
     def __int__(self):
         self.id = None #初始化可确定
@@ -230,3 +305,4 @@ class Bill:
         self.service_cost = None #服务费，充电度数*服务费，提交订单时确定
         self.total_cost = None #总花费为充电费+服务费，提交订单时确定
         self.user_name = None #用户名
+

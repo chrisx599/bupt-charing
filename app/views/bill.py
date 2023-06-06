@@ -18,7 +18,15 @@ def tobill():
 def toedit():
     username = session.get('user')
     data_list = billing_system.get_user_bill(username)
-    return render_template('edit_bill.html',order=data_list[0])
+    if request.method == 'GET':
+        return render_template('edit_bill.html')
+        # return render_template('edit_bill.html', order=data_list[0])
+    order_id = request.form.get("order_id")
+    charge_mode = request.form.get("mode")
+    charge_power = request.form.get("power")
+    billing_system.edit_user_bill(order_id, charge_mode, charge_power)
+    data_list = billing_system.get_user_bill(username)
+    return render_template('bill.html', order=data_list)
 
 @bill.route("/deletebill",methods=["GET", "POST"])
 @auth
