@@ -13,7 +13,7 @@ def tobill():
     print(data_list)
     return render_template('bill.html',order=data_list)
 
-@bill.route("edit_bill",methods=["GET", "POST"])
+@bill.route("/changebill",methods=["GET", "POST"])
 @auth
 def toedit():
     username = session.get('user')

@@ -20,9 +20,10 @@ def index():
     car_id = request.form.get('car_id')
     car_need_power = request.form.get('car_need_power')
 
-    order_id = uuid.uuid1()
-    print(order_id)
-    print(type(order_id))
+
+    order_id = str(uuid.uuid1())
+    # print(order_id)
+    # print(type(order_id))
     val = []
     val.append(order_id)
     val.append(charge_system.timer.get_simulate_time())
@@ -32,10 +33,11 @@ def index():
     else:
         val.append(int(car_need_power) / 7)
 
+
     val.append(int(car_need_power))
-    val.append(int(car_need_power) * 0.7)
-    val.append(int(car_need_power) * 0.8)
-    val.append(int(car_need_power) * 0.7 + int(car_need_power) * 0.8)
+    # val.append(int(car_need_power) * 0.7)
+    # val.append(int(car_need_power) * 0.8)
+    # val.append(int(car_need_power) * 0.7 + int(car_need_power) * 0.8)
     val.append(username)
 
     # 充电模式分类

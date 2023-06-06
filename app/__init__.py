@@ -29,10 +29,10 @@ def get_charge_system(db):
     return charge_system
 
 
-def get_billing_system(db):
-    billing_system = BillingSystem(db)
+def get_billing_system(db, charge_system):
+    billing_system = BillingSystem(db, charge_system)
     return billing_system
 
 db = get_db()
 charge_system = get_charge_system(db)
-billing_system = get_billing_system(db)
+billing_system = get_billing_system(db, charge_system)
