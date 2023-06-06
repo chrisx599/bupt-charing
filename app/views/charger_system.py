@@ -368,7 +368,7 @@ class SimulateTimer():
     def __init__(self) -> None:
         self.time = {'year': 2023, 'month': 6, 'date': 1, 'hour': 1, 'minute': 0}
         self.timer_flag = True
-        # self.simulate_time()
+        self.simulate_time()
 
     def simulate_time(self):
         self.timer = threading.Timer(0.5, self.update_time)  # 每0.5s模拟1分钟,每30s模拟1小时
